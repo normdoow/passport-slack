@@ -1,6 +1,6 @@
 This package was forked from [passport-slack](https://github.com/mjpearson/passport-slack) and updated for slack v2 of oauth.
 
-# passport-slack
+# passport-slack-v2
 
 [Passport](https://github.com/jaredhanson/passport) strategy for authenticating
 with [Slack](https://slack.com) using the OAuth 2.0 API version 2.
@@ -128,4 +128,4 @@ passport.use(new SlackStrategy({
 
 [The MIT License](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2014 [Noah Bragg](http://github.com/normdoow)
+Copyright (c) 2020 [Noah Bragg](http://github.com/normdoow)
