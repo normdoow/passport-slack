@@ -1,24 +1,22 @@
+This package was forked from [passport-slack](https://github.com/mjpearson/passport-slack) and updated for slack v2 of oauth.
+
 # passport-slack
 
 [Passport](https://github.com/jaredhanson/passport) strategy for authenticating
-with [Slack](https://slack.com) using the OAuth 2.0 API.
+with [Slack](https://slack.com) using the OAuth 2.0 API version 2.
 
-Updated to support Sign in with Slack by default.<br>
-[![Sign in with Slack](https://a.slack-edge.com/accd8/img/sign_in_with_slack.png)](https://api.slack.com/docs/sign-in-with-slack#identify_users_and_their_teams)
-
-## Notice
-
-This repository is not getting the love it deserves. If you're interested in taking over maintenance or ownership of this repo and npm, please ask Slack to care about it.
+Updated to support Add to Slack by default.<br>
+[![Add to Slack](https://platform.slack-edge.com/img/add_to_slack.png)](https://api.slack.com/docs/slack-button)
 
 ## Install
 ```shell
-$ npm install passport-slack
+$ npm install passport-slack-v2
 ```
 
 ## Express Example
 ```js
 const {CLIENT_ID, CLIENT_SECRET, PORT} = process.env,
-      SlackStrategy = require('passport-slack').Strategy,
+      SlackStrategy = require('passport-slack-v2').Strategy,
       passport = require('passport'),
       express = require('express'),
       app = express();
@@ -52,32 +50,9 @@ app.listen(PORT);
 ```json
 {
     "provider": "Slack",
-    "id": "U123XXXXX",
-    "displayName": "John Agan",
-    "user": {
-        "name": "John Agan",
-        "id": "U123XXXXX",
-        "email": "johnagan@testing.com",
-        "image_24": "https://secure.gravatar.com/avatar/123abcd123bc12b3c.jpg?s=24&d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0000-24.png",
-        "image_32": "https://secure.gravatar.com/avatar/123abcd123bc12b3c.jpg?s=32&d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0000-32.png",
-        "image_48": "https://secure.gravatar.com/avatar/123abcd123bc12b3c.jpg?s=48&d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0000-48.png",
-        "image_72": "https://secure.gravatar.com/avatar/123abcd123bc12b3c.jpg?s=72&d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0000-72.png",
-        "image_192": "https://secure.gravatar.com/avatar/123abcd123bc12b3c.jpg?s=192&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0000-192.png",
-        "image_512": "https://secure.gravatar.com/avatar/123abcd123bc12b3c.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0000-512.png"
-    },
-    "team": {
-        "id": "T123XXXX",
-        "name": "My Awesome Team",
-        "domain": "my-awesome-team",
-        "image_34": "https://a.slack-edge.com/0000/img/avatars-teams/ava_0000-00.png",
-        "image_44": "https://a.slack-edge.com/00a0/img/avatars-teams/ava_0000-00.png",
-        "image_68": "https://a.slack-edge.com/00a0/img/avatars-teams/ava_0000-00.png",
-        "image_88": "https://a.slack-edge.com/00a0/img/avatars-teams/ava_0000-00.png",
-        "image_102": "https://a.slack-edge.com/00a0/img/avatars-teams/ava_0000-000.png",
-        "image_132": "https://a.slack-edge.com/00a0/img/avatars-teams/ava_0000-000.png",
-        "image_230": "https://a.slack-edge.com/0a0a0/img/avatars-teams/ava_0000-000.png",
-        "image_default": true
-    }
+    "url": "https://subarachnoid.slack.com/",
+    "team": "Subarachnoid Workspace",
+    "team_id": "T12345678",
 }
 
 ```
@@ -96,7 +71,7 @@ passport.use(new SlackStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
     skipUserProfile: false, // default
-    scope: ['identity.basic', 'identity.email', 'identity.avatar', 'identity.team'] // default
+    scope: [] // default is none, you will have to add yours as strings comma seperated
   },
   (accessToken, refreshToken, profile, done) => {
     // optionally persist user data into a database
@@ -123,13 +98,13 @@ app.get('/auth/slack/callback',
 ```
 
 ### Custom Scopes
-By default passport-slack strategy will try to retrieve [all user identity](https://api.slack.com/methods/users.identity) from Slack using the default scopes of `identity.basic`, `identity.email`, `identity.avatar`, and `identity.team`. To override these, set the `scope` parameter to an array of scopes.
+By default passport-slack-v2 strategy will have no slack scopes. To override these, set the `scope` parameter to an array of scopes.
 
 ```js
 passport.use(new SlackStrategy({
 	clientID: CLIENT_ID,
 	clientSecret: CLIENT_SECRET,
-	scope: ['identity.basic', 'channels:read', 'chat:write:user']
+	scope: ['chat:write', 'groups:read', 'im:read', 'mpim:read', 'users.profile:read', 'users:read', 'users:read.email']
 }, () => { });
 ```
 
@@ -146,10 +121,11 @@ passport.use(new SlackStrategy({
 
 ## Thanks
 
-  - [Jared Hanson](http://github.com/jaredhanson)
+  - [Noah Bragg](http://github.com/normdoow)
+  This package was forked from [passport-slack](https://github.com/mjpearson/passport-slack)
 
 ## License
 
 [The MIT License](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2014 [Michael Pearson](http://github.com/mjpearson)
+Copyright (c) 2014 [Noah Bragg](http://github.com/normdoow)
